@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<title>정렬 알고리즘 시각화</title>
+<style>
+    body {
+        background: #111;
+        font-family: Arial;
+        color: white;
+        text-align: center;
+    }
+
+    #bars {
+        display: flex;
+        justify-content: center;
+        align-items: flex-end;
+        height: 400px;
+        margin-top: 20px;
+    }
+
+    .bar {
+        width: 20px;
+        margin: 1px;
+        background: cyan;
+    }
+
+    button {
+        padding: 10px 20px;
+        margin: 10px;
+        border: none;
+        background: #333;
+        color: white;
+        cursor: pointer;
+        font-size: 16px;
+        border-radius: 5px;
+    }
+
+    button:hover {
+        background: #555;
+    }
+</style>
+</head>
+<body>
+
+<h1>정렬 알고리즘 시각화</h1>
+
+<button onclick="generateBars()">새 배열 생성</button>
+<button onclick="bubbleSort()">버블 정렬</button>
+<button onclick="selectionSort()">선택 정렬</button>
+<button onclick="insertionSort()">삽입 정렬</button>
+
+<div id="bars"></div>
+
+<script>
+    let array = [];
+
+    // 랜덤 배열 생성
+    function generateBars() {
+        array = [];
+        for (let i = 0; i < 25; i++) {
+            array.push(Math.floor(Math.random() * 300) + 10);
+        }
+        renderBars(array);
+    }
+
+    // 막대 렌더링
+    function renderBars(arr, highlight = []) {
+        const bars = document.getElementById("bars");
+        bars.innerHTML = "";
+        arr.forEach((value, index) => {
+            const bar = document.createElement("div");
+            bar.classList.add("bar");
+            bar.style.height = value + "px";
+            if (highlight.includes(index)) {
+                bar.style.background = "red";
+            }
+            bars.appendChild(bar);
+        });
+    }
+
+    // 딜레이
+    function sleep(ms) {
+        return new Promise(resolve => setTimeout(resolve, ms));
+    }
+
+    // -------------------------------
+    // 1. 버블 정렬
+    // -------------------------------
+    async function bubbleSort() {
+        let arr = array.slice();
+        let n = arr.length;
+
+        for (let i = 0; i < n; i++) {
+            for (let j = 0; j < n - i - 1; j++) {
+                renderBars(arr, [j, j + 1]);
+                await sleep(80);
+
+                if (arr[j] > arr[j + 1]) {
+                    [arr[j], arr[j + 1]] = [arr[j + 1], arr[j]];
+                }
+            }
+        }
+        array = arr;
+        renderBars(arr);
+    }
+
+    // -------------------------------
+    // 2. 선택 정렬
+    // -------------------------------
+    async function selectionSort() {
+        let arr = array.slice();
+        let n = arr.length;
+
+        for (let i = 0; i < n; i++) {
+            let minIndex = i;
+
+            for (let j = i + 1; j < n; j++) {
+                renderBars(arr, [minIndex, j]);
+                await sleep(80);
+
+                if (arr[j] < arr[minIndex]) {
+                    minIndex = j;
+                }
+            }
+
+            [arr[i], arr[minIndex]] = [arr[minIndex], arr[i]];
+        }
+
+        array = arr;
+        renderBars(arr);
+    }
+
+    // -------------------------------
+    // 3. 삽입 정렬
+    // -------------------------------
+    async function insertionSort() {
+        let arr = array.slice();
+        let n = arr.length;
+
+        for (let i = 1; i < n; i++) {
+            let key = arr[i];
+            let j = i - 1;
+
+            while (j >= 0 && arr[j] > key) {
+                arr[j + 1] = arr[j];
+                renderBars(arr, [j, j + 1]);
+                await sleep(80);
+                j--;
+            }
+            arr[j + 1] = key;
+        }
+
+        array = arr;
+        renderBars(arr);
+    }
+
+    generateBars();
+</script>
+
+</body>
+</html>
