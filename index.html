@@ -10,7 +10,6 @@
         color: white;
         text-align: center;
     }
-
     #bars {
         display: flex;
         justify-content: center;
@@ -18,13 +17,11 @@
         height: 400px;
         margin-top: 20px;
     }
-
     .bar {
         width: 20px;
         margin: 1px;
         background: cyan;
     }
-
     button {
         padding: 10px 20px;
         margin: 10px;
@@ -35,26 +32,27 @@
         font-size: 16px;
         border-radius: 5px;
     }
-
     button:hover {
         background: #555;
+    }
+    button:disabled {
+        background: #222;
+        color: #666;
+        cursor: not-allowed;
     }
 </style>
 </head>
 <body>
-
 <h1>정렬 알고리즘 시각화</h1>
-
 <button onclick="generateBars()">새 배열 생성</button>
 <button onclick="bubbleSort()">버블 정렬</button>
 <button onclick="selectionSort()">선택 정렬</button>
 <button onclick="insertionSort()">삽입 정렬</button>
-
 <div id="bars"></div>
-
 <script>
     let array = [];
-
+    let isSorting = false;
+    
     // 랜덤 배열 생성
     function generateBars() {
         array = [];
@@ -63,7 +61,7 @@
         }
         renderBars(array);
     }
-
+    
     // 막대 렌더링
     function renderBars(arr, highlight = []) {
         const bars = document.getElementById("bars");
@@ -78,24 +76,33 @@
             bars.appendChild(bar);
         });
     }
-
+    
     // 딜레이
     function sleep(ms) {
         return new Promise(resolve => setTimeout(resolve, ms));
     }
-
+    
+    // 버튼 비활성화/활성화
+    function toggleButtons(disabled) {
+        const buttons = document.querySelectorAll('button');
+        buttons.forEach(btn => btn.disabled = disabled);
+    }
+    
     // -------------------------------
     // 1. 버블 정렬
     // -------------------------------
     async function bubbleSort() {
+        if (isSorting) return;
+        isSorting = true;
+        toggleButtons(true);
+        
+        generateBars(); // 초기화
         let arr = array.slice();
         let n = arr.length;
-
         for (let i = 0; i < n; i++) {
             for (let j = 0; j < n - i - 1; j++) {
                 renderBars(arr, [j, j + 1]);
                 await sleep(40);
-
                 if (arr[j] > arr[j + 1]) {
                     [arr[j], arr[j + 1]] = [arr[j + 1], arr[j]];
                 }
@@ -103,45 +110,54 @@
         }
         array = arr;
         renderBars(arr);
+        
+        isSorting = false;
+        toggleButtons(false);
     }
-
+    
     // -------------------------------
     // 2. 선택 정렬
     // -------------------------------
     async function selectionSort() {
+        if (isSorting) return;
+        isSorting = true;
+        toggleButtons(true);
+        
+        generateBars(); // 초기화
         let arr = array.slice();
         let n = arr.length;
-
         for (let i = 0; i < n; i++) {
             let minIndex = i;
-
             for (let j = i + 1; j < n; j++) {
                 renderBars(arr, [minIndex, j]);
                 await sleep(40);
-
                 if (arr[j] < arr[minIndex]) {
                     minIndex = j;
                 }
             }
-
             [arr[i], arr[minIndex]] = [arr[minIndex], arr[i]];
         }
-
         array = arr;
         renderBars(arr);
+        
+        isSorting = false;
+        toggleButtons(false);
     }
-
+    
     // -------------------------------
     // 3. 삽입 정렬
     // -------------------------------
     async function insertionSort() {
+        if (isSorting) return;
+        isSorting = true;
+        toggleButtons(true);
+        
+        generateBars(); // 초기화
         let arr = array.slice();
         let n = arr.length;
-
         for (let i = 1; i < n; i++) {
             let key = arr[i];
             let j = i - 1;
-
             while (j >= 0 && arr[j] > key) {
                 arr[j + 1] = arr[j];
                 renderBars(arr, [j, j + 1]);
@@ -150,13 +166,14 @@
             }
             arr[j + 1] = key;
         }
-
         array = arr;
         renderBars(arr);
+        
+        isSorting = false;
+        toggleButtons(false);
     }
-
+    
     generateBars();
 </script>
-
 </body>
 </html>
