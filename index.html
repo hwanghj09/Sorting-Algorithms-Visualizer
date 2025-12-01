@@ -94,7 +94,7 @@
         for (let i = 0; i < n; i++) {
             for (let j = 0; j < n - i - 1; j++) {
                 renderBars(arr, [j, j + 1]);
-                await sleep(80);
+                await sleep(40);
 
                 if (arr[j] > arr[j + 1]) {
                     [arr[j], arr[j + 1]] = [arr[j + 1], arr[j]];
@@ -117,7 +117,7 @@
 
             for (let j = i + 1; j < n; j++) {
                 renderBars(arr, [minIndex, j]);
-                await sleep(80);
+                await sleep(40);
 
                 if (arr[j] < arr[minIndex]) {
                     minIndex = j;
@@ -145,7 +145,7 @@
             while (j >= 0 && arr[j] > key) {
                 arr[j + 1] = arr[j];
                 renderBars(arr, [j, j + 1]);
-                await sleep(80);
+                await sleep(40);
                 j--;
             }
             arr[j + 1] = key;
