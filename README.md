@@ -1,7 +1,9 @@
 # 정렬 알고리즘 시각화
 
 이 탐구에서 구현한 정렬 알고리즘 시각화 프로그램을 통해 버블 정렬, 선택 정렬, 삽입 정렬의 동작 과정을 비교 및 관찰하였다
-[https://hwanghj09.github.io/Sorting-Algorithms-Visualizer/]
+
+사이트 : https://hwanghj09.github.io/Sorting-Algorithms-Visualizer/
+
 각 알고리즘의 결과는 다음과 같았다
 
 ## 버블 정렬
